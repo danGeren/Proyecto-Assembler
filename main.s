@@ -1,6 +1,6 @@
 /*Proyecto 
   Daniel Gerendas 13158
-  Kuk Chung
+  Kuk Ho Chung 13279
   Es un controlador de servomotor
   */
 
