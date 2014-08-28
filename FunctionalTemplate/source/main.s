@@ -1,6 +1,6 @@
 /*Proyecto 
   Daniel Gerendas 13158
-  Kuk Ho Chung 13279
+  Kuk zHo Chung 13279
   Es un controlador de servomotor
   */
 
@@ -22,7 +22,7 @@ main:
 revisar:
 	mov r6, #24
 	ldr r4,=0x20200000
-	
+	/*
 	ldr r7,[r4,#0x34]
 	mov r9,#1
 	lsl r9, r6
@@ -111,12 +111,12 @@ siguiente:
 		str r4, [r5], #4
 		b siguiente
 	
-	terminoGrabacion:
+terminoGrabacion:
 	@apagar el LED
 	mov r0, #23
 	mov r1, #0
 	bl SetGpio
-	
+	*/
 	@Revisar boton reproducir para ver cuando se debe empezar a reproducir la seuencia
 revisar1:
 	mov r6, #25
@@ -128,9 +128,10 @@ revisar1:
 	and r7, r7 ,r9
 	
 	teq r7, #0
-	bne grabar
+	bne reproducir
 	beq revisar1
-	
+
+reproducir:
 	mov r0, #7
 	mov r1, #1
 	bl SetGpioFunction
@@ -174,9 +175,7 @@ pulso:
 infinito:
 	b infinito
 	
-
-	
-	
+/*
 	mov r0, #7
 	mov r1, #1
 	bl SetGpioFunction

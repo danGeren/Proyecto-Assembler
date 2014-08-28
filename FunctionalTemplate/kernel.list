@@ -5,12 +5,12 @@ build/output.elf:     file format elf32-littlearm
 Disassembly of section .init:
 
 00000000 <_start>:
-   0:	ea002024 	b	8098 <main>
+   0:	ea002035 	b	80dc <main>
 
 Disassembly of section .text:
 
 00008000 <GetGpioAddress>:
-    8000:	e59f008c 	ldr	r0, [pc, #140]	; 8094 <SetGpio+0x3c>
+    8000:	e59f00d0 	ldr	r0, [pc, #208]	; 80d8 <GetGpio+0x34>
     8004:	e1a0f00e 	mov	pc, lr
 
 00008008 <SetGpioFunction>:
@@ -18,137 +18,143 @@ Disassembly of section .text:
     800c:	93510007 	cmpls	r1, #7
     8010:	81a0f00e 	movhi	pc, lr
     8014:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    8018:	e1a02000 	mov	r2, r0
-    801c:	ebfffff7 	bl	8000 <GetGpioAddress>
+    8018:	e92d1010 	push	{r4, ip}
+    801c:	e1a02000 	mov	r2, r0
+    8020:	ebfffff6 	bl	8000 <GetGpioAddress>
 
-00008020 <functionLoop$>:
-    8020:	e3520009 	cmp	r2, #9
-    8024:	8242200a 	subhi	r2, r2, #10
-    8028:	82800004 	addhi	r0, r0, #4
-    802c:	8afffffb 	bhi	8020 <functionLoop$>
-    8030:	e0822082 	add	r2, r2, r2, lsl #1
-    8034:	e1a01211 	lsl	r1, r1, r2
-    8038:	e3a03007 	mov	r3, #7
-    803c:	e1a03213 	lsl	r3, r3, r2
-    8040:	e1e03003 	mvn	r3, r3
-    8044:	e5902000 	ldr	r2, [r0]
-    8048:	e0022003 	and	r2, r2, r3
-    804c:	e1811002 	orr	r1, r1, r2
-    8050:	e5801000 	str	r1, [r0]
-    8054:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+00008024 <functionLoop$>:
+    8024:	e3520009 	cmp	r2, #9
+    8028:	8242200a 	subhi	r2, r2, #10
+    802c:	82800004 	addhi	r0, r0, #4
+    8030:	8afffffb 	bhi	8024 <functionLoop$>
+    8034:	e0822082 	add	r2, r2, r2, lsl #1
+    8038:	e1a01211 	lsl	r1, r1, r2
+    803c:	e3a03007 	mov	r3, #7
+    8040:	e1a03213 	lsl	r3, r3, r2
+    8044:	e1e03003 	mvn	r3, r3
+    8048:	e5902000 	ldr	r2, [r0]
+    804c:	e0022003 	and	r2, r2, r3
+    8050:	e1811002 	orr	r1, r1, r2
+    8054:	e5801000 	str	r1, [r0]
+    8058:	e8bd1010 	pop	{r4, ip}
+    805c:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-00008058 <SetGpio>:
-    8058:	e3500035 	cmp	r0, #53	; 0x35
-    805c:	81a0f00e 	movhi	pc, lr
-    8060:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    8064:	e1a02000 	mov	r2, r0
-    8068:	ebffffe4 	bl	8000 <GetGpioAddress>
-    806c:	e1a032a2 	lsr	r3, r2, #5
-    8070:	e1a03103 	lsl	r3, r3, #2
-    8074:	e0800003 	add	r0, r0, r3
-    8078:	e202201f 	and	r2, r2, #31
-    807c:	e3a03001 	mov	r3, #1
-    8080:	e1a03213 	lsl	r3, r3, r2
-    8084:	e3310000 	teq	r1, #0
-    8088:	05803028 	streq	r3, [r0, #40]	; 0x28
-    808c:	1580301c 	strne	r3, [r0, #28]
-    8090:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
-    8094:	20200000 	.word	0x20200000
+00008060 <SetGpio>:
+    8060:	e3500035 	cmp	r0, #53	; 0x35
+    8064:	81a0f00e 	movhi	pc, lr
+    8068:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    806c:	e92d1010 	push	{r4, ip}
+    8070:	e1a02000 	mov	r2, r0
+    8074:	ebffffe1 	bl	8000 <GetGpioAddress>
+    8078:	e1a032a2 	lsr	r3, r2, #5
+    807c:	e1a03103 	lsl	r3, r3, #2
+    8080:	e0800003 	add	r0, r0, r3
+    8084:	e202201f 	and	r2, r2, #31
+    8088:	e3a03001 	mov	r3, #1
+    808c:	e1a03213 	lsl	r3, r3, r2
+    8090:	e3310000 	teq	r1, #0
+    8094:	05803028 	streq	r3, [r0, #40]	; 0x28
+    8098:	1580301c 	strne	r3, [r0, #28]
+    809c:	e8bd1010 	pop	{r4, ip}
+    80a0:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-00008098 <main>:
-    8098:	e3a0d902 	mov	sp, #32768	; 0x8000
-    809c:	e3a00017 	mov	r0, #23
-    80a0:	e3a01001 	mov	r1, #1
-    80a4:	ebffffd7 	bl	8008 <SetGpioFunction>
-    80a8:	e3a00018 	mov	r0, #24
-    80ac:	e3a01001 	mov	r1, #1
-    80b0:	ebffffd4 	bl	8008 <SetGpioFunction>
-    80b4:	e3a00019 	mov	r0, #25
-    80b8:	e3a01001 	mov	r1, #1
-    80bc:	ebffffd1 	bl	8008 <SetGpioFunction>
+000080a4 <GetGpio>:
+    80a4:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    80a8:	e92d1010 	push	{r4, ip}
+    80ac:	e1a06000 	mov	r6, r0
+    80b0:	e59f4020 	ldr	r4, [pc, #32]	; 80d8 <GetGpio+0x34>
+    80b4:	e5947034 	ldr	r7, [r4, #52]	; 0x34
+    80b8:	e3a09001 	mov	r9, #1
+    80bc:	e1a09619 	lsl	r9, r9, r6
+    80c0:	e0077009 	and	r7, r7, r9
+    80c4:	e3370000 	teq	r7, #0
+    80c8:	13a00001 	movne	r0, #1
+    80cc:	03a00000 	moveq	r0, #0
+    80d0:	e8bd1010 	pop	{r4, ip}
+    80d4:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+    80d8:	20200000 	.word	0x20200000
 
-000080c0 <loop$>:
-    80c0:	e3a00017 	mov	r0, #23
-    80c4:	e59f1088 	ldr	r1, [pc, #136]	; 8154 <loop$+0x94>
-    80c8:	eb000022 	bl	8158 <encenderLed>
-    80cc:	e3a00018 	mov	r0, #24
-    80d0:	e59f107c 	ldr	r1, [pc, #124]	; 8154 <loop$+0x94>
-    80d4:	eb00001f 	bl	8158 <encenderLed>
-    80d8:	e3a00019 	mov	r0, #25
-    80dc:	e59f1070 	ldr	r1, [pc, #112]	; 8154 <loop$+0x94>
-    80e0:	eb00001c 	bl	8158 <encenderLed>
-    80e4:	e3a00017 	mov	r0, #23
-    80e8:	e3a01005 	mov	r1, #5
-    80ec:	eb000022 	bl	817c <apagarLed>
-    80f0:	e3a00018 	mov	r0, #24
-    80f4:	e3a01005 	mov	r1, #5
-    80f8:	eb00001f 	bl	817c <apagarLed>
-    80fc:	e3a00019 	mov	r0, #25
-    8100:	e3a01005 	mov	r1, #5
-    8104:	eb00001c 	bl	817c <apagarLed>
-    8108:	e3a00017 	mov	r0, #23
-    810c:	e3a01005 	mov	r1, #5
-    8110:	eb000010 	bl	8158 <encenderLed>
-    8114:	e3a00018 	mov	r0, #24
-    8118:	e3a01005 	mov	r1, #5
-    811c:	eb00000d 	bl	8158 <encenderLed>
-    8120:	e3a00019 	mov	r0, #25
-    8124:	e3a01005 	mov	r1, #5
-    8128:	eb00000a 	bl	8158 <encenderLed>
-    812c:	e3a00017 	mov	r0, #23
-    8130:	e3a01005 	mov	r1, #5
-    8134:	eb000010 	bl	817c <apagarLed>
-    8138:	e3a00018 	mov	r0, #24
-    813c:	e3a01005 	mov	r1, #5
-    8140:	eb00000d 	bl	817c <apagarLed>
-    8144:	e3a00019 	mov	r0, #25
-    8148:	e3a01005 	mov	r1, #5
-    814c:	eb00000a 	bl	817c <apagarLed>
-    8150:	eaffffda 	b	80c0 <loop$>
-    8154:	0007a120 	.word	0x0007a120
+000080dc <main>:
+    80dc:	e3a0d902 	mov	sp, #32768	; 0x8000
 
-00008158 <encenderLed>:
-    8158:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    815c:	e1a05000 	mov	r5, r0
-    8160:	e1a06001 	mov	r6, r1
-    8164:	e1a00005 	mov	r0, r5
-    8168:	e3a01001 	mov	r1, #1
-    816c:	ebffffb9 	bl	8058 <SetGpio>
-    8170:	e1a00006 	mov	r0, r6
-    8174:	eb00000f 	bl	81b8 <Wait>
-    8178:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+000080e0 <revisar>:
+    80e0:	e3a06018 	mov	r6, #24
+    80e4:	e59f4094 	ldr	r4, [pc, #148]	; 8180 <infinito+0x4>
 
-0000817c <apagarLed>:
-    817c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    8180:	e1a05000 	mov	r5, r0
-    8184:	e1a06001 	mov	r6, r1
-    8188:	e1a00005 	mov	r0, r5
-    818c:	e3a01000 	mov	r1, #0
-    8190:	ebffffb0 	bl	8058 <SetGpio>
-    8194:	e1a00006 	mov	r0, r6
-    8198:	eb000006 	bl	81b8 <Wait>
-    819c:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+000080e8 <revisar1>:
+    80e8:	e3a06019 	mov	r6, #25
+    80ec:	e59f408c 	ldr	r4, [pc, #140]	; 8180 <infinito+0x4>
+    80f0:	e5947034 	ldr	r7, [r4, #52]	; 0x34
+    80f4:	e3a09001 	mov	r9, #1
+    80f8:	e1a09619 	lsl	r9, r9, r6
+    80fc:	e0077009 	and	r7, r7, r9
+    8100:	e3370000 	teq	r7, #0
+    8104:	1a000000 	bne	810c <reproducir>
+    8108:	0afffff6 	beq	80e8 <revisar1>
 
-000081a0 <GetSystemTimerBase>:
-    81a0:	e59f0034 	ldr	r0, [pc, #52]	; 81dc <loop$+0x14>
-    81a4:	e1a0f00e 	mov	pc, lr
+0000810c <reproducir>:
+    810c:	e3a00007 	mov	r0, #7
+    8110:	e3a01001 	mov	r1, #1
+    8114:	ebffffbb 	bl	8008 <SetGpioFunction>
+    8118:	e3a04005 	mov	r4, #5
+    811c:	e59f5060 	ldr	r5, [pc, #96]	; 8184 <infinito+0x8>
 
-000081a8 <GetTimeStamp>:
-    81a8:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    81ac:	ebfffffb 	bl	81a0 <GetSystemTimerBase>
-    81b0:	e1c000d4 	ldrd	r0, [r0, #4]
-    81b4:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+00008120 <siguiente1>:
+    8120:	e3540000 	cmp	r4, #0
+    8124:	0a000014 	beq	817c <infinito>
+    8128:	e4956004 	ldr	r6, [r5], #4
+    812c:	e59f8054 	ldr	r8, [pc, #84]	; 8188 <infinito+0xc>
+    8130:	e0488006 	sub	r8, r8, r6
+    8134:	e59f9050 	ldr	r9, [pc, #80]	; 818c <infinito+0x10>
+    8138:	eb000016 	bl	8198 <GetTimeStamp>
+    813c:	e0899000 	add	r9, r9, r0
 
-000081b8 <Wait>:
-    81b8:	e1a02000 	mov	r2, r0
-    81bc:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    81c0:	ebfffff8 	bl	81a8 <GetTimeStamp>
-    81c4:	e1a03000 	mov	r3, r0
+00008140 <pulso>:
+    8140:	e1590000 	cmp	r9, r0
+    8144:	b2444001 	sublt	r4, r4, #1
+    8148:	bafffff4 	blt	8120 <siguiente1>
+    814c:	e3a00007 	mov	r0, #7
+    8150:	e3a01001 	mov	r1, #1
+    8154:	ebffffc1 	bl	8060 <SetGpio>
+    8158:	e1a00006 	mov	r0, r6
+    815c:	eb000011 	bl	81a8 <Wait>
+    8160:	e3a00007 	mov	r0, #7
+    8164:	e3a01000 	mov	r1, #0
+    8168:	ebffffbc 	bl	8060 <SetGpio>
+    816c:	e1a00008 	mov	r0, r8
+    8170:	eb00000c 	bl	81a8 <Wait>
+    8174:	eb000007 	bl	8198 <GetTimeStamp>
+    8178:	eafffff0 	b	8140 <pulso>
 
-000081c8 <loop$>:
-    81c8:	ebfffff6 	bl	81a8 <GetTimeStamp>
-    81cc:	e0401003 	sub	r1, r0, r3
-    81d0:	e1510002 	cmp	r1, r2
-    81d4:	9afffffb 	bls	81c8 <loop$>
-    81d8:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
-    81dc:	20003000 	.word	0x20003000
+0000817c <infinito>:
+    817c:	eafffffe 	b	817c <infinito>
+    8180:	20200000 	.word	0x20200000
+    8184:	000081d8 	.word	0x000081d8
+    8188:	00004e20 	.word	0x00004e20
+    818c:	001e8480 	.word	0x001e8480
+
+00008190 <GetSystemTimerBase>:
+    8190:	e59f003c 	ldr	r0, [pc, #60]	; 81d4 <loop$+0x18>
+    8194:	e1a0f00e 	mov	pc, lr
+
+00008198 <GetTimeStamp>:
+    8198:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    819c:	ebfffffb 	bl	8190 <GetSystemTimerBase>
+    81a0:	e1c000d4 	ldrd	r0, [r0, #4]
+    81a4:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000081a8 <Wait>:
+    81a8:	e1a02000 	mov	r2, r0
+    81ac:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    81b0:	e92d1010 	push	{r4, ip}
+    81b4:	ebfffff7 	bl	8198 <GetTimeStamp>
+    81b8:	e1a03000 	mov	r3, r0
+
+000081bc <loop$>:
+    81bc:	ebfffff5 	bl	8198 <GetTimeStamp>
+    81c0:	e0401003 	sub	r1, r0, r3
+    81c4:	e1510002 	cmp	r1, r2
+    81c8:	9afffffb 	bls	81bc <loop$>
+    81cc:	e8bd1010 	pop	{r4, ip}
+    81d0:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+    81d4:	20003000 	.word	0x20003000
