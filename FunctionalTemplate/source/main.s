@@ -4,11 +4,6 @@
   Es un controlador de servomotor
   */
 
-.section .data
-.align 2
-
-sec: .int 1500,1250,1750,1000,1500
-
 .section .init
 .globl _start
 _start:
@@ -116,7 +111,7 @@ terminoGrabacion:
 	mov r0, #23
 	mov r1, #0
 	bl SetGpio
-	*/
+	
 	@Revisar boton reproducir para ver cuando se debe empezar a reproducir la seuencia
 revisar1:
 	mov r6, #25
@@ -129,8 +124,7 @@ revisar1:
 	
 	teq r7, #0
 	bne reproducir
-	beq revisar1
-
+*/
 reproducir:
 	mov r0, #7
 	mov r1, #1
@@ -197,7 +191,10 @@ infinito:
 	bl Wait
 	
 	b infinito
-	
-*/
+*/	
 
+.section .data
+.align 2
+
+sec: .int 1500,1250,1750,1000,1500
 

@@ -79,82 +79,71 @@ Disassembly of section .text:
 
 000080e0 <revisar>:
     80e0:	e3a06018 	mov	r6, #24
-    80e4:	e59f4094 	ldr	r4, [pc, #148]	; 8180 <infinito+0x4>
+    80e4:	e59f4070 	ldr	r4, [pc, #112]	; 815c <infinito+0x4>
 
-000080e8 <revisar1>:
-    80e8:	e3a06019 	mov	r6, #25
-    80ec:	e59f408c 	ldr	r4, [pc, #140]	; 8180 <infinito+0x4>
-    80f0:	e5947034 	ldr	r7, [r4, #52]	; 0x34
-    80f4:	e3a09001 	mov	r9, #1
-    80f8:	e1a09619 	lsl	r9, r9, r6
-    80fc:	e0077009 	and	r7, r7, r9
-    8100:	e3370000 	teq	r7, #0
-    8104:	1a000000 	bne	810c <reproducir>
-    8108:	0afffff6 	beq	80e8 <revisar1>
+000080e8 <reproducir>:
+    80e8:	e3a00007 	mov	r0, #7
+    80ec:	e3a01001 	mov	r1, #1
+    80f0:	ebffffc4 	bl	8008 <SetGpioFunction>
+    80f4:	e3a04005 	mov	r4, #5
+    80f8:	e59f5060 	ldr	r5, [pc, #96]	; 8160 <infinito+0x8>
 
-0000810c <reproducir>:
-    810c:	e3a00007 	mov	r0, #7
-    8110:	e3a01001 	mov	r1, #1
-    8114:	ebffffbb 	bl	8008 <SetGpioFunction>
-    8118:	e3a04005 	mov	r4, #5
-    811c:	e59f5060 	ldr	r5, [pc, #96]	; 8184 <infinito+0x8>
+000080fc <siguiente1>:
+    80fc:	e3540000 	cmp	r4, #0
+    8100:	0a000014 	beq	8158 <infinito>
+    8104:	e4956004 	ldr	r6, [r5], #4
+    8108:	e59f8054 	ldr	r8, [pc, #84]	; 8164 <infinito+0xc>
+    810c:	e0488006 	sub	r8, r8, r6
+    8110:	e59f9050 	ldr	r9, [pc, #80]	; 8168 <infinito+0x10>
+    8114:	eb000016 	bl	8174 <GetTimeStamp>
+    8118:	e0899000 	add	r9, r9, r0
 
-00008120 <siguiente1>:
-    8120:	e3540000 	cmp	r4, #0
-    8124:	0a000014 	beq	817c <infinito>
-    8128:	e4956004 	ldr	r6, [r5], #4
-    812c:	e59f8054 	ldr	r8, [pc, #84]	; 8188 <infinito+0xc>
-    8130:	e0488006 	sub	r8, r8, r6
-    8134:	e59f9050 	ldr	r9, [pc, #80]	; 818c <infinito+0x10>
-    8138:	eb000016 	bl	8198 <GetTimeStamp>
-    813c:	e0899000 	add	r9, r9, r0
+0000811c <pulso>:
+    811c:	e1590000 	cmp	r9, r0
+    8120:	b2444001 	sublt	r4, r4, #1
+    8124:	bafffff4 	blt	80fc <siguiente1>
+    8128:	e3a00007 	mov	r0, #7
+    812c:	e3a01001 	mov	r1, #1
+    8130:	ebffffca 	bl	8060 <SetGpio>
+    8134:	e1a00006 	mov	r0, r6
+    8138:	eb000011 	bl	8184 <Wait>
+    813c:	e3a00007 	mov	r0, #7
+    8140:	e3a01000 	mov	r1, #0
+    8144:	ebffffc5 	bl	8060 <SetGpio>
+    8148:	e1a00008 	mov	r0, r8
+    814c:	eb00000c 	bl	8184 <Wait>
+    8150:	eb000007 	bl	8174 <GetTimeStamp>
+    8154:	eafffff0 	b	811c <pulso>
 
-00008140 <pulso>:
-    8140:	e1590000 	cmp	r9, r0
-    8144:	b2444001 	sublt	r4, r4, #1
-    8148:	bafffff4 	blt	8120 <siguiente1>
-    814c:	e3a00007 	mov	r0, #7
-    8150:	e3a01001 	mov	r1, #1
-    8154:	ebffffc1 	bl	8060 <SetGpio>
-    8158:	e1a00006 	mov	r0, r6
-    815c:	eb000011 	bl	81a8 <Wait>
-    8160:	e3a00007 	mov	r0, #7
-    8164:	e3a01000 	mov	r1, #0
-    8168:	ebffffbc 	bl	8060 <SetGpio>
-    816c:	e1a00008 	mov	r0, r8
-    8170:	eb00000c 	bl	81a8 <Wait>
-    8174:	eb000007 	bl	8198 <GetTimeStamp>
-    8178:	eafffff0 	b	8140 <pulso>
+00008158 <infinito>:
+    8158:	eafffffe 	b	8158 <infinito>
+    815c:	20200000 	.word	0x20200000
+    8160:	000081b4 	.word	0x000081b4
+    8164:	00004e20 	.word	0x00004e20
+    8168:	001e8480 	.word	0x001e8480
 
-0000817c <infinito>:
-    817c:	eafffffe 	b	817c <infinito>
-    8180:	20200000 	.word	0x20200000
-    8184:	000081d8 	.word	0x000081d8
-    8188:	00004e20 	.word	0x00004e20
-    818c:	001e8480 	.word	0x001e8480
+0000816c <GetSystemTimerBase>:
+    816c:	e59f003c 	ldr	r0, [pc, #60]	; 81b0 <loop$+0x18>
+    8170:	e1a0f00e 	mov	pc, lr
 
-00008190 <GetSystemTimerBase>:
-    8190:	e59f003c 	ldr	r0, [pc, #60]	; 81d4 <loop$+0x18>
-    8194:	e1a0f00e 	mov	pc, lr
+00008174 <GetTimeStamp>:
+    8174:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    8178:	ebfffffb 	bl	816c <GetSystemTimerBase>
+    817c:	e1c000d4 	ldrd	r0, [r0, #4]
+    8180:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
 
-00008198 <GetTimeStamp>:
-    8198:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    819c:	ebfffffb 	bl	8190 <GetSystemTimerBase>
-    81a0:	e1c000d4 	ldrd	r0, [r0, #4]
-    81a4:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+00008184 <Wait>:
+    8184:	e1a02000 	mov	r2, r0
+    8188:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    818c:	e92d1010 	push	{r4, ip}
+    8190:	ebfffff7 	bl	8174 <GetTimeStamp>
+    8194:	e1a03000 	mov	r3, r0
 
-000081a8 <Wait>:
-    81a8:	e1a02000 	mov	r2, r0
-    81ac:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
-    81b0:	e92d1010 	push	{r4, ip}
-    81b4:	ebfffff7 	bl	8198 <GetTimeStamp>
-    81b8:	e1a03000 	mov	r3, r0
-
-000081bc <loop$>:
-    81bc:	ebfffff5 	bl	8198 <GetTimeStamp>
-    81c0:	e0401003 	sub	r1, r0, r3
-    81c4:	e1510002 	cmp	r1, r2
-    81c8:	9afffffb 	bls	81bc <loop$>
-    81cc:	e8bd1010 	pop	{r4, ip}
-    81d0:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
-    81d4:	20003000 	.word	0x20003000
+00008198 <loop$>:
+    8198:	ebfffff5 	bl	8174 <GetTimeStamp>
+    819c:	e0401003 	sub	r1, r0, r3
+    81a0:	e1510002 	cmp	r1, r2
+    81a4:	9afffffb 	bls	8198 <loop$>
+    81a8:	e8bd1010 	pop	{r4, ip}
+    81ac:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+    81b0:	20003000 	.word	0x20003000
