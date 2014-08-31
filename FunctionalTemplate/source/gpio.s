@@ -123,28 +123,4 @@ SetGpio:
 	ldmfd	sp!, {r4, r12}
 	pop {pc}
 	
-/* 
-Obtiene el valor de entrada de cada puerto de 0 a 31
-r0...puerto
-Devuelve en r0 1 o 0 segun lo encontrado
-*/
-.globl GetGpio
-GetGpio:
-	push {lr}
-	stmfd	sp!, {r4, r12}
-	
-	mov r6, r0
-	ldr r4,=0x20200000
-	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, r6
-	and r7, r7 ,r9
-	
-	teq r7, #0
-	movne r0, #1
-	moveq r0, #0
-	
-	ldmfd	sp!, {r4, r12}
-	pop {pc}
 

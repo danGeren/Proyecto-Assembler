@@ -7,7 +7,7 @@
 .section .data
 .align 2
 
-sec: .int 0,0,0,0,0
+sec: .int 1500,1500,1500,1500,1500
 
 .section .init
 .globl _start
@@ -18,43 +18,15 @@ b main
 
 main:
 	mov sp, #0x8000
-	
-	mov r0, #16
-	mov r1, #1
-	bl SetGpioFunction
-	
-	mov r0, #18
-	mov r1, #0
-	bl SetGpioFunction
-	
-	mov r0, #17
-	mov r1, #0
-	bl SetGpioFunction
-	
-	mov r0, #15
-	mov r1, #0
-	bl SetGpioFunction
-	
-	mov r0, #4
-	mov r1, #0
-	bl SetGpioFunction
-	
-	mov r0, #25
-	mov r1, #0
-	bl SetGpioFunction
-	
-	mov r0, #14
-	mov r1, #0
-	bl SetGpioFunction
+	bl SetearRaspberry
 	
 revisar:
 	
 	ldr r4,=0x20200000
 	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, #4
-	and r7, r7 ,r9
+	mov r0, #4
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
 	bne grabar
@@ -64,10 +36,9 @@ _0grados:
 	
 	ldr r4,=0x20200000
 	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, #18
-	and r7, r7 ,r9
+	mov r0, #18
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
 	beq _45grados
@@ -84,10 +55,9 @@ _0grados:
 _45grados:
 	ldr r4,=0x20200000
 	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, #17
-	and r7, r7 ,r9
+	mov r0, #17
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
 	beq _90grados
@@ -100,10 +70,9 @@ _45grados:
 _90grados:
 	ldr r4,=0x20200000
 	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, #15
-	and r7, r7 ,r9
+	mov r0, #15
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
 	beq _135grados
@@ -116,18 +85,28 @@ _90grados:
 _135grados:
 	ldr r4,=0x20200000
 	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, #14
-	and r7, r7 ,r9
+	mov r0, #14
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
-	beq revisar
+	beq botonRep
 	
 	ldr r0, =2350
 	mov r2, #7
 	bl moverServo
 	b revisar
+	
+botonRep:
+	ldr r4,=0x20200000
+	
+	mov r0, #25
+	bl GetGpio
+	mov r7, r0
+	
+	teq r7, #0
+	beq revisar
+	b reproducir
 	
 grabar:
 	mov r0, #16
@@ -151,12 +130,9 @@ siguiente:
 	cmp r8, #-1
 	beq terminoGrabacion
 esperar:
-		mov r6, #18
-		ldr r4,=0x20200000
-		ldr r7,[r4,#0x34]
-		mov r9,#1
-		lsl r9, r6
-		and r7, r7 ,r9
+		mov r0, #18
+		bl GetGpio
+		mov r7, r0
 		
 		teq r7, #0
 		beq boton2
@@ -176,12 +152,9 @@ esperar:
 		b siguiente
 	
 	boton2:
-		mov r6, #17
-		ldr r4,=0x20200000
-		ldr r7,[r4,#0x34]
-		mov r9,#1
-		lsl r9, r6
-		and r7, r7 ,r9
+		mov r0, #17
+		bl GetGpio
+		mov r7, r0
 		
 		teq r7, #0
 		beq boton3
@@ -201,12 +174,9 @@ esperar:
 	
 	boton3:
 	
-		mov r6, #15
-		ldr r4,=0x20200000
-		ldr r7,[r4,#0x34]
-		mov r9,#1
-		lsl r9, r6
-		and r7, r7 ,r9
+		mov r0, #15
+		bl GetGpio
+		mov r7, r0
 		
 		teq r7, #0
 		beq boton4
@@ -226,12 +196,9 @@ esperar:
 	
 	boton4:
 		
-		mov r6, #14
-		ldr r4,=0x20200000
-		ldr r7,[r4,#0x34]
-		mov r9,#1
-		lsl r9, r6
-		and r7, r7 ,r9
+		mov r0, #14
+		bl GetGpio
+		mov r7, r0
 		
 		teq r7, #0
 		beq esperar
@@ -256,24 +223,19 @@ terminoGrabacion:
 	bl SetGpio
 	
 	@Revisar boton reproducir para ver cuando se debe empezar a reproducir la seuencia
+	/*
 revisar1:
-	mov r6, #25
-	ldr r4,=0x20200000
-	
-	ldr r7,[r4,#0x34]
-	mov r9,#1
-	lsl r9, r6
-	and r7, r7 ,r9
+	mov r0, #25
+	bl GetGpio
+	mov r7, r0
 	
 	teq r7, #0
 	bne reproducir
 	beq revisar1
+	*/
+	b revisar
 
-reproducir:
-	mov r0, #7
-	mov r1, #1
-	bl SetGpioFunction
-	
+reproducir:	
 	mov r4,#5
 	ldr r5, =sec
 	
@@ -313,29 +275,5 @@ pulso:
 infinito:
 	b revisar
 	
-/*
-	mov r0, #7
-	mov r1, #1
-	bl SetGpioFunction
-	
-infinito:
-	
-	mov r0, #7
-	mov r1, #1
-	bl SetGpio
-	
-	ldr r0, =1500
-	bl Wait
-	
-	mov r0, #7
-	mov r1, #0
-	bl SetGpio
-	
-	ldr r0, =18500
-	bl Wait
-	
-	b infinito
-	
-*/
 
 
